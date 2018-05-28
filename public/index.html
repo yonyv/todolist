@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>todo list</title>
+    <style>
+        body {font-size:16px;background: #CDCDCD}
+        input[type="text"] {
+            width: 30%;
+            margin-left: 15%;
+            margin-top: 10px;
+            padding: 10px;   
+            }
+        h3{
+            text-shadow: 5px 5px 5px rgb(35, 156, 236);
+        }
+        ul {
+            display: flex;
+            border: #888888;
+            background-color:lightgrey;
+            flex-wrap: wrap;
+            list-style-type: none;}
+        button{
+            border-radius:5px;
+        }
+        li {
+            text-align: left;
+            max-width: 30%;
+            min-height: 50px;
+            box-shadow: 10px 10px 5px #888888;
+            margin:10px;
+            padding: 5px;
+            border:1px solid #888889;
+	        border-radius:5px;}
+        .atb{
+            margin-left: 15%;
+        } 
+        .tc{
+            margin: 5px;
+        }
+        
+    </style>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+</head>
+
+
+<body>    
+    <div ng-app="App" ng-controller="ctrl">
+        <button class="atb" ng-click="toggle()">添加task</button>    
+        <form ng-hide="h">
+            <input type="text" ng-model="task">
+            <button ng-click="addTask()">添加</button>
+        </form>
+        
+        <h3 ng-hide="tasks.length==0">待办</h3>
+        <ul>
+            <li ng-repeat="(index,x) in tasks track by $index" >
+                <div class="tc">{{x}}</div>
+                <span>
+                    <button ng-click="din(index)">do it now</button>
+                    <button ng-click="del(index)">delete</button>
+                </span>
+            </li>
+        </ul>
+        <h3 ng-hide="doingTasks.length==0">进行中</h3>
+        <ul>
+            <li ng-repeat="(index,x) in doingTasks track by $index" >
+                <div class="tc">{{x}}</div>
+                <button ng-click="done(index)">done</button>
+                <button ng-click="delDoing(index)">delete</button>
+            </li>
+        </ul>
+        <h3 ng-hide="doneTasks.length==0">已完成</h3>
+        <ul>
+            <li ng-repeat="(index,x) in doneTasks track by $index" >
+                <div class="tc">{{x}}</div>
+                <button ng-click="delDone(index)">delete</button>
+            </li>
+        </ul>
+    </div>
+        
+
+    <script>
+        var app = angular.module('App', []);
+        app.controller('ctrl', function($scope) {
+            //隐藏输入文本框,点击按钮显示或隐藏
+            $scope.h = true;
+                $scope.toggle = function() {
+                $scope.h = !$scope.h;
+            }
+            //tasks用于存放待办tasks数据
+            $scope.tasks = ["吃饭"];
+            //doingTasks用于存放进行中的tasks数据
+            $scope.doingTasks=["睡觉"];
+            //doneTasks用于存放已经完成的tasks数据
+            $scope.doneTasks=["打豆豆"];
+            
+            
+
+            //添加task
+            $scope.addTask=function(){
+                $scope.tasks.push($scope.task);
+                $scope.task='';
+            }
+            //删除task
+            $scope.del=function(a){
+                $scope.tasks.splice(a,1);
+            }
+            //删除进行中的tasl
+            $scope.delDoing=function(a){
+                $scope.doingTasks.splice(a,1);
+            }
+            //删除已完成的task
+            $scope.delDone=function(a){
+                $scope.doneTasks.splice(a,1);
+            }
+            //do it now 按钮事件
+            $scope.din=function(a){
+                var itm=$scope.tasks[a];
+                $scope.tasks.splice(a,1);
+                $scope.doingTasks.push(itm);
+            }
+            //done 按钮事件
+            $scope.done=function(a){
+                var itm=$scope.doingTasks[a];
+                $scope.doingTasks.splice(a,1);
+                $scope.doneTasks.push(itm);
+            }
+            
+        });
+        </script>
+</body>
+</html>
